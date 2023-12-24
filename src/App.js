@@ -1,5 +1,5 @@
 // App.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Story from './Story';
 import Choice from './Choice';
 import PhotoTreasure from './PhotoTreasure';
@@ -8,6 +8,7 @@ import backgroundMusic from "./audio/LabyrinthCut.mp3"; // Update with the corre
 import happyMusic from "./audio/Win-music.mp3";
 
 const App = () => {
+  const backgroundMusicRef = useRef(new Audio(backgroundMusic));
   const [storyIndex, setStoryIndex] = useState(0);
   const [treasureFound, setTreasureFound] = useState(false);
   const [happySoundPlayed, setHappySoundPlayed] = useState(false);
@@ -37,10 +38,10 @@ const App = () => {
     setStoryIndex(0);
     setTreasureFound(false);
     setHappySoundPlayed(false);
-    const backgroundMusicAudio = document.getElementById('background-music');
-    if (backgroundMusicAudio) {
-      backgroundMusicAudio.play(); // Resume the background music
+    if (backgroundMusicRef.current) {
+      backgroundMusicRef.current.play(); // Resume background music
     }
+    console.log('Game reset');
   };
 
   return (
@@ -53,7 +54,7 @@ const App = () => {
         {!treasureFound ? (
           <Story index={storyIndex} />
         ) : (
-          <PhotoTreasure onReset={handleReset} />
+          <PhotoTreasure onReset={handleReset} backgroundMusicRef={backgroundMusicRef} />
         )}
       </div>
       <div className="choice">

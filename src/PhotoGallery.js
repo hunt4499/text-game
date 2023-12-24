@@ -1,12 +1,12 @@
 // PhotoGallery.js
-import React, { useState, useEffect } from 'react';
-import './PhotoGallery.css';
+import React, { useState, useEffect } from "react";
+import "./PhotoGallery.css";
 
 const photos = [
   // Add your photo URLs here
-  'url_to_photo_1.jpg',
-  'url_to_photo_2.jpg',
-  'url_to_photo_3.jpg',
+  "https://photos.app.goo.gl/31PuV1mdd3uaEBby8",
+  "url_to_photo_2.jpg",
+  "url_to_photo_3.jpg",
   // Add more photo URLs as needed
 ];
 
@@ -28,7 +28,8 @@ const PhotoGallery = () => {
           key={index}
           src={photo}
           alt={`Photo ${index + 1}`}
-          className={index === currentPhotoIndex ? 'active' : ''}
+          referrerpolicy="no-referrer"
+          className={index === currentPhotoIndex ? "active" : ""}
         />
       ))}
     </div>
