@@ -22,10 +22,9 @@ const Choice = ({ index, onChoice, showNextButton, onNext, challengeStarted }) =
   return (
     <div>
       {choices[index] && choices[index].map((choice, i) => (
-        <button key={i} onClick={(e) => handleButtonClick(i, e)} disabled={challengeStarted || !showNextButton}>
-        {choice}
-      </button>
-
+        <button key={i} onClick={(e) => handleButtonClick(i, e)} disabled={challengeStarted}>
+          {choice}
+        </button>
       ))}
       {(showNextButton && index !== choices.length - 1) && <button onClick={onNext}>Next</button>}
       {index === choices.length - 1 && !showNextButton && !challengeStarted && (

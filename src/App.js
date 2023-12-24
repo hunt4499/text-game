@@ -56,7 +56,7 @@ const App = () => {
         } else if (choiceIndex === 1) {
           setStoryIndex(6);
         }
-      } else if (storyIndex === 7 && choiceIndex === 0) { // Check if it's the challenge start choice
+      } else if (storyIndex === 7 && choiceIndex === 0) {
         setTreasureFound(true);
       }
 
@@ -67,6 +67,7 @@ const App = () => {
       console.error('Error in handleChoice:', error);
     }
   };
+
 
   const handleReset = () => {
     setStoryIndex(0);
