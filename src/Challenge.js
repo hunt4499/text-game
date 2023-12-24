@@ -1,32 +1,44 @@
 // Challenge.js
-import React, { useState, useEffect } from 'react';
-import froggoImg from './dogpics/froggo-real.jpg'
+import React, { useState, useEffect } from "react";
+import froggoImg from "./dogpics/froggo-real.jpg";
+import horrorMusic from "./audio/horror.mp3";
 
 const Challenge = ({ onChallengeComplete }) => {
   const [frogHits, setFrogHits] = useState(0);
   const [challengeCompleted, setChallengeCompleted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(30); // Set an initial time limit (in seconds)
+  const [timeLeft, setTimeLeft] = useState(10); // Set an initial time limit (in seconds)
   const [dogImageUrl, setDogImageUrl] = useState(null);
+  const [menacingMusic, setMenacingMusic] = useState(false);
 
   useEffect(() => {
-    // Check if the time is up or user has been hit by the Frog 5 times
-    if (timeLeft === 0 || frogHits >= 5) {
-      setChallengeCompleted(true);
-      if (frogHits >= 5) {
-        // Fetch a random dog image when the user is defeated
-        fetchRandomDogImage();
+    const frogHitTimer = setInterval(() => {
+      // Simulate Frog hitting back randomly
+      if (Math.random() < 0.3) {
+        setFrogHits((prevHits) => prevHits + 1);
       }
-      onChallengeComplete();
-    }
+    }, 2000); // Adjust the interval as needed
 
-    // Decrease the time every second
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => Math.max(0, prevTime - 1));
+    const mainTimer = setInterval(() => {
+      // Check if the time is up
+      if (timeLeft === 0) {
+        setChallengeCompleted(true);
+        setMenacingMusic(false);
+        fetchRandomDogImage();
+        onChallengeComplete(dogImageUrl);
+      } else {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }
     }, 1000);
 
-    // Cleanup the interval on component unmount
-    return () => clearInterval(timer);
-  }, [timeLeft, frogHits, onChallengeComplete]);
+    // Play menacing music when the challenge starts
+    setMenacingMusic(true);
+
+    // Cleanup timers on component unmount
+    return () => {
+      clearInterval(frogHitTimer);
+      clearInterval(mainTimer);
+    };
+  }, [timeLeft, onChallengeComplete, dogImageUrl]);
 
   const handleFrogClick = () => {
     setFrogHits((prevHits) => prevHits + 1);
@@ -34,11 +46,11 @@ const Challenge = ({ onChallengeComplete }) => {
 
   const fetchRandomDogImage = async () => {
     try {
-      const response = await fetch('https://dog.ceo/api/breeds/image/random');
+      const response = await fetch("https://dog.ceo/api/breeds/image/random");
       const data = await response.json();
       setDogImageUrl(data.message);
     } catch (error) {
-      console.error('Error fetching dog image:', error);
+      console.error("Error fetching dog image:", error);
     }
   };
 
@@ -47,9 +59,13 @@ const Challenge = ({ onChallengeComplete }) => {
       {challengeCompleted ? (
         dogImageUrl ? (
           <div>
-            <p>Oops! You got hit by the Frog too many times. Here's a random dog photo for you.</p>
+            <p>Time's up! Here's a random dog photo for you.</p>
             {/* Display the random dog photo */}
-            <img src={dogImageUrl} alt="Random Dog" />
+            <img
+              src={dogImageUrl}
+              alt="Random Dog"
+              style={{ width: "200px", height: "200px" }}
+            />
           </div>
         ) : (
           <p>Challenge Completed! You can now access the treasure.</p>
@@ -60,12 +76,18 @@ const Challenge = ({ onChallengeComplete }) => {
           <p>Frog Hits: {frogHits}</p>
           <p>Time Left: {timeLeft} seconds</p>
           {/* Display the Froggo image */}
-          <img src={froggoImg} alt="Froggo" width={400} height={400}/>
+          <img src={froggoImg} alt="Froggo" width={400} height={300} />
           {/* Frog challenge elements and logic */}
           <button onClick={handleFrogClick} disabled={timeLeft === 0}>
             Hit the Frog
           </button>
         </div>
+      )}
+      {menacingMusic && (
+        // Play menacing music during the challenge
+        <audio autoPlay loop>
+          <source src={horrorMusic} type="audio/mpeg" />
+        </audio>
       )}
     </div>
   );
