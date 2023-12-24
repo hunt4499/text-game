@@ -1,14 +1,15 @@
 // PhotoTreasure.js
 import React from 'react';
+import PhotoGallery from './PhotoGallery';
 import './PhotoTreasure.css';
 
-const PhotoTreasure = ({ onReset, onHappySound }) => {
+const PhotoTreasure = ({ onReset }) => {
   return (
     <div className="photo-treasure">
       <p>Congratulations! You've found the treasure!</p>
       <p>Open the treasure chest below to reveal our special memories together:</p>
-      {/* Add a component or logic to display the photo treasure */}
-      <button onClick={() => { onHappySound(); onReset(); }}>Reset Game</button>
+      <PhotoGallery />
+      <button onClick={onReset}>Reset Game</button>
     </div>
   );
 };

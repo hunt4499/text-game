@@ -1,0 +1,19 @@
+/* PhotoGallery.css */
+.photo-gallery {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px; /* Set the height as needed */
+    overflow: hidden;
+  }
+
+  .photo-gallery img {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .photo-gallery img.active {
+    opacity: 1;
+  }
