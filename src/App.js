@@ -1,9 +1,9 @@
 // App.js
-import React, { useState } from "react";
-import Story from "./Story";
-import Choice from "./Choice";
-import PhotoTreasure from "./PhotoTreasure";
-import "./styles.css";
+import React, { useState, useEffect } from 'react';
+import Story from './Story';
+import Choice from './Choice';
+import PhotoTreasure from './PhotoTreasure';
+import './styles.css';
 import backgroundMusic from "./audio/LabyrinthCut.mp3"; // Update with the correct path
 import happyMusic from "./audio/Win-music.mp3";
 
@@ -12,10 +12,22 @@ const App = () => {
   const [treasureFound, setTreasureFound] = useState(false);
   const [happySoundPlayed, setHappySoundPlayed] = useState(false);
 
+  useEffect(() => {
+    if (treasureFound && !happySoundPlayed) {
+      const backgroundMusicAudio = document.getElementById('background-music');
+      if (backgroundMusicAudio) {
+        backgroundMusicAudio.pause(); // Pause the background music
+      }
+
+      const happySoundAudio = new Audio(happyMusic); // Update with the correct path
+      happySoundAudio.play();
+      setHappySoundPlayed(true);
+    }
+  }, [treasureFound, happySoundPlayed]);
+
   const handleChoice = (choiceIndex) => {
     if (choiceIndex === 2) {
       setTreasureFound(true);
-      setHappySoundPlayed(false); // Reset the happy sound state
     } else {
       setStoryIndex(choiceIndex);
     }
@@ -25,25 +37,9 @@ const App = () => {
     setStoryIndex(0);
     setTreasureFound(false);
     setHappySoundPlayed(false);
-  };
-
-  const handleHappySound = async () => {
-    if (!happySoundPlayed) {
-      const backgroundMusicAudio = document.getElementById("background-music");
-      if (backgroundMusicAudio) {
-        backgroundMusicAudio.pause(); // Pause the background music
-      }
-      var happySoundAudio = new Audio(happyMusic);
-      happySoundAudio.type = "audio/mpeg";
-      try {
-        await happySoundAudio.play();
-
-        console.log("Playing audio" + happySoundAudio);
-        happySoundAudio.play();
-        setHappySoundPlayed(true);
-      } catch (err) {
-        console.log("Failed to play, error: " + err);
-      }
+    const backgroundMusicAudio = document.getElementById('background-music');
+    if (backgroundMusicAudio) {
+      backgroundMusicAudio.play(); // Resume the background music
     }
   };
 
@@ -57,10 +53,7 @@ const App = () => {
         {!treasureFound ? (
           <Story index={storyIndex} />
         ) : (
-          <PhotoTreasure
-            onReset={handleReset}
-            onHappySound={handleHappySound}
-          />
+          <PhotoTreasure onReset={handleReset} />
         )}
       </div>
       <div className="choice">
