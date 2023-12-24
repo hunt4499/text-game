@@ -1,19 +1,29 @@
 /* PhotoGallery.css */
 .photo-gallery {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 400px; /* Set the height as needed */
-    overflow: hidden;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px; /* Set the height as needed */
+  overflow: hidden;
+}
 
-  .photo-gallery img {
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-    max-width: 100%;
-    height: auto;
-  }
+.image-container img.active {
+  opacity: 1;
+}
 
-  .photo-gallery img.active {
-    opacity: 1;
-  }
+.image-container {
+  max-width: 200px; /* Set the maximum width of each image container */
+  max-height: 300px; /* Set the maximum height of each image container */
+  overflow: hidden;
+}
+
+.image-container img {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  max-width: 100%;
+  height: auto;
+}
+
+.image-container img.active {
+  opacity: 1;
+}
