@@ -1,13 +1,19 @@
 // App.js
-import React, { useState, useEffect, useRef } from 'react';
-import Story from './Story';
-import Choice from './Choice';
-import PhotoTreasure from './PhotoTreasure';
-import './styles.css';
+import React, { useState, useEffect, useRef } from "react";
+import Story from "./Story";
+import Choice from "./Choice";
+import PhotoTreasure from "./PhotoTreasure";
+import Challenge from "./Challenge";
+import "./styles.css";
 import backgroundMusic from "./audio/LabyrinthCut.mp3"; // Update with the correct path
 import happyMusic from "./audio/Win-music.mp3";
 
 const App = () => {
+  const [challengeCompleted, setChallengeCompleted] = useState(false);
+
+  const handleChallengeComplete = () => {
+    setChallengeCompleted(true);
+  };
   const backgroundMusicRef = useRef(new Audio(backgroundMusic));
   const [storyIndex, setStoryIndex] = useState(0);
   const [treasureFound, setTreasureFound] = useState(false);
@@ -15,7 +21,7 @@ const App = () => {
 
   useEffect(() => {
     if (treasureFound && !happySoundPlayed) {
-      const backgroundMusicAudio = document.getElementById('background-music');
+      const backgroundMusicAudio = document.getElementById("background-music");
       if (backgroundMusicAudio) {
         backgroundMusicAudio.pause(); // Pause the background music
       }
@@ -41,7 +47,7 @@ const App = () => {
     if (backgroundMusicRef.current) {
       backgroundMusicRef.current.play(); // Resume background music
     }
-    console.log('Game reset');
+    console.log("Game reset");
   };
 
   return (
@@ -53,8 +59,13 @@ const App = () => {
       <div className="story" id="story-container">
         {!treasureFound ? (
           <Story index={storyIndex} />
+        ) : challengeCompleted ? (
+          <PhotoTreasure
+            onReset={handleReset}
+            backgroundMusicRef={backgroundMusicRef}
+          />
         ) : (
-          <PhotoTreasure onReset={handleReset} backgroundMusicRef={backgroundMusicRef} />
+          <Challenge onChallengeComplete={handleChallengeComplete} />
         )}
       </div>
       <div className="choice">
