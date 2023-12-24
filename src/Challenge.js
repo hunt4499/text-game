@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import froggoImg from "./dogpics/froggo-real.jpg";
 import horrorMusic from "./audio/horror.mp3";
+import PhotoTreasure from "./PhotoTreasure";
 
 const Challenge = ({ onChallengeComplete }) => {
   const [frogHits, setFrogHits] = useState(0);
@@ -19,10 +20,14 @@ const Challenge = ({ onChallengeComplete }) => {
     }, 2000); // Adjust the interval as needed
 
     const mainTimer = setInterval(() => {
-      // Check if the time is up
-      if (timeLeft === 0) {
+      if(frogHits>=10){
         setChallengeCompleted(true);
         setMenacingMusic(false);
+      }
+      else if (timeLeft === 0 && frogHits >= 10) {
+        setChallengeCompleted(true);
+        setMenacingMusic(false);
+      } else if (timeLeft === 0 && frogHits < 10) {
         fetchRandomDogImage();
         onChallengeComplete(dogImageUrl);
       } else {
@@ -41,13 +46,16 @@ const Challenge = ({ onChallengeComplete }) => {
   }, [timeLeft, onChallengeComplete, dogImageUrl]);
 
   const handleFrogClick = () => {
-    setFrogHits((prevHits) => prevHits + 1);
+    setFrogHits((prevHits) =>
+    prevHits + 1);
+
   };
 
   const fetchRandomDogImage = async () => {
     try {
       const response = await fetch("https://dog.ceo/api/breeds/image/random");
       const data = await response.json();
+      console.log("Random Dog Image URL:", data.message);
       setDogImageUrl(data.message);
     } catch (error) {
       console.error("Error fetching dog image:", error);
@@ -68,11 +76,17 @@ const Challenge = ({ onChallengeComplete }) => {
             />
           </div>
         ) : (
+          <div>
           <p>Challenge Completed! You can now access the treasure.</p>
+          <PhotoTreasure/>
+          </div>
         )
       ) : (
         <div>
-          <p>Defeat the evil Frog to unlock the treasure!</p>
+          <p>
+            Defeat the evil Frog by hitting it 10 times before the time runs out
+            to unlock the treasure!
+          </p>
           <p>Frog Hits: {frogHits}</p>
           <p>Time Left: {timeLeft} seconds</p>
           {/* Display the Froggo image */}
